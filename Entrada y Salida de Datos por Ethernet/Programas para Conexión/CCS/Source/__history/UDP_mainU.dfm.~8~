@@ -1,0 +1,147 @@
+object FrmTCPMain: TFrmTCPMain
+  Left = 0
+  Top = 0
+  Width = 294
+  Height = 429
+  Caption = 'UDP Client'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 16
+    Top = 8
+    Width = 52
+    Height = 13
+    Caption = 'IP Address'
+  end
+  object Label2: TLabel
+    Left = 152
+    Top = 8
+    Width = 56
+    Height = 13
+    Caption = 'Source Port'
+  end
+  object Label3: TLabel
+    Left = 16
+    Top = 104
+    Width = 77
+    Height = 13
+    Caption = 'Incomming Data'
+  end
+  object Label4: TLabel
+    Left = 16
+    Top = 232
+    Width = 70
+    Height = 13
+    Caption = 'Outgoing Data'
+  end
+  object Label5: TLabel
+    Left = 152
+    Top = 48
+    Width = 45
+    Height = 13
+    Caption = 'Dest Port'
+  end
+  object Label6: TLabel
+    Left = 16
+    Top = 48
+    Width = 35
+    Height = 13
+    Caption = 'Dest IP'
+  end
+  object IP_Address: TEdit
+    Left = 16
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 0
+    Text = '127.0.0.1'
+  end
+  object SourcePort: TEdit
+    Left = 152
+    Top = 24
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    Text = '255'
+  end
+  object IncommingData: TMemo
+    Left = 11
+    Top = 120
+    Width = 265
+    Height = 105
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 2
+  end
+  object SendData: TMemo
+    Left = 11
+    Top = 248
+    Width = 265
+    Height = 105
+    ScrollBars = ssVertical
+    TabOrder = 3
+  end
+  object SendButt: TButton
+    Left = 149
+    Top = 360
+    Width = 75
+    Height = 25
+    Action = SendAct
+    TabOrder = 4
+  end
+  object DestPort: TEdit
+    Left = 152
+    Top = 64
+    Width = 121
+    Height = 21
+    TabOrder = 5
+    Text = '255'
+  end
+  object Button1: TButton
+    Left = 45
+    Top = 362
+    Width = 75
+    Height = 25
+    Action = ConnectAct
+    TabOrder = 6
+  end
+  object RemoteHost: TEdit
+    Left = 16
+    Top = 64
+    Width = 121
+    Height = 21
+    TabOrder = 7
+    Text = '127.0.0.1'
+  end
+  object ActionManager1: TActionManager
+    Left = 80
+    Top = 128
+    StyleName = 'XP Style'
+    object ConnectAct: TAction
+      Caption = 'Connect'
+      OnExecute = ConnectActExecute
+    end
+    object SendAct: TAction
+      Caption = 'Send'
+      OnExecute = SendActExecute
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 200
+    Top = 184
+  end
+  object UdpSocket1: TUdpSocket
+    OnReceive = UdpSocket1Receive
+    OnError = UdpSocket1Error
+    Left = 136
+    Top = 168
+  end
+end

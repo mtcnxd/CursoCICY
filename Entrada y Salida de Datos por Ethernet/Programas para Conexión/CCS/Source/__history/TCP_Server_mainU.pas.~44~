@@ -1,0 +1,286 @@
+unit TCP_Server_mainU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Sockets, StdCtrls, ActnList, XPStyleActnCtrls,
+  ActnMan, ExtCtrls, winsock;
+
+const
+  WM_SOCKET_CLOSED = WM_USER + $37;
+
+type
+  TconnectionMon = class(Tthread)
+  private
+    ClientSocket: TCustomIpClient;
+    TcpServer1: TTcpServer;
+    procedure Execute; override;
+
+  end;
+
+  TFrmTCPMain = class(TForm)
+    IP_Address: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Port: TEdit;
+    IncommingData: TMemo;
+    Label3: TLabel;
+    SendData: TMemo;
+    Label4: TLabel;
+    Button1: TButton;
+    SendButt: TButton;
+    ActionManager1: TActionManager;
+    ConnectAct: TAction;
+    SendAct: TAction;
+    TcpServer1: TTcpServer;
+    Label5: TLabel;
+    RemoteAdd: TEdit;
+    RemotePort: TEdit;
+    Label6: TLabel;
+    Timer1: TTimer;
+    DisconnectAct: TAction;
+    Button2: TButton;
+    procedure DisconnectActExecute(Sender: TObject);
+    procedure DisconnectActUpdate(Sender: TObject);
+    procedure SendActExecute(Sender: TObject);
+    procedure TcpServer1Listening(Sender: TObject);
+    procedure TcpServer1GetThread(Sender: TObject;
+      var ClientSocketThread: TClientSocketThread);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ConnectActExecute(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure TcpServer1Accept(Sender: TObject; ClientSocket: TCustomIpClient);
+    procedure SendActUpdate(Sender: TObject);
+    procedure ConnectActUpdate(Sender: TObject);
+  private
+    { Private declarations }
+    Fconnected: boolean;
+    outBuff: string;
+    ClientConnection: TconnectionMon;
+    ClientSocket: TCustomIpClient;
+    procedure DoSocketClosed(var msg: tmessage); message WM_SOCKET_CLOSED;
+    procedure DoDisconnect(sender: Tobject);
+    procedure DoNewData(Sender: TObject; Buf: pchar; var DataLen: Integer);
+    procedure onReciveData(Sender: TObject; Buf: pchar; var DataLen: Integer);
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTCPMain: TFrmTCPMain;
+
+implementation
+
+{$R *.dfm}
+
+{----------------------------------------------------------------}
+{ Update captions                                                }
+{----------------------------------------------------------------}
+
+procedure TFrmTCPMain.ConnectActUpdate(Sender: TObject);
+const
+  CAPTIONS: array[boolean] of string[10] = ('Listen', 'Close');
+begin
+  (sender as Taction).caption := CAPTIONS[TcpServer1.Listening or Fconnected];
+end;
+
+procedure TFrmTCPMain.DoNewData(Sender: TObject; Buf: pchar;
+  var DataLen: Integer);
+var
+  Astr: string;
+  index: integer;
+  Achar: Pchar;
+begin
+  Astr := '';
+  Achar := buf;
+  for index := 1 to datalen do
+    begin
+      Astr := astr + Achar^;
+      INC(Achar);
+    end;
+  self.IncommingData.lines.add(Astr);
+end;
+
+procedure TFrmTCPMain.SendActUpdate(Sender: TObject);
+begin
+  (Sender as Taction).enabled := Fconnected and
+                                 (SendData.Text <> '');
+end;
+
+
+
+procedure TFrmTCPMain.TcpServer1Accept(Sender: TObject;
+  ClientSocket: TCustomIpClient);
+var
+  buffsize: integer;
+  buff: array[0..255] of char;
+  tempbuff: string;
+begin
+ // if assigned(self.clientsocket)
+ //   then raise exception.create('Already connected');
+  //self.ClientSocket := TcustomIpClient.Create(self);
+  Fconnected := TRUE;
+  self.clientSocket := clientSocket;
+  //self.ClientSocket.Assign(ClientSocket);
+  self.RemoteAdd.Text := clientsocket.RemoteHost;
+  self.RemotePort.text := clientsocket.RemotePort;
+  tcpserver1.RemoteHost := clientsocket.remotehost;
+  tcpserver1.remoteport := clientsocket.remoteport;
+  self.clientsocket.OnReceive := DoNewData;
+  self.ClientConnection.ClientSocket := clientSocket;
+  ClientSocket.OnDisconnect := DoDisconnect;
+  WSAAsyncSelect(clientSocket.Handle, self.Handle, WM_SOCKET_CLOSED, FD_CLOSE);
+  while Fconnected and assigned(self.ClientSocket) and (Self.ClientSocket.Connected) do
+    begin
+      sleep(0); // wait here until connection over
+      if clientsocket.WaitForData(50)
+        then
+          begin
+            buffsize:= clientsocket.ReceiveBuf(buff[0], sizeof(buff));
+           // self.DoNewData(clientsocket, @buff[0], buffsize);
+          end;
+      if outbuff <> ''
+        then
+          begin
+            TempBuff := outbuff;
+            Outbuff := '';
+            clientsocket.SendBuf(Pchar(tempbuff)^, length(tempbuff))
+
+          end;
+
+      //TCPServer1.WaitForData(10000);
+      application.ProcessMessages;
+      //FConnected := FALSE;
+    end;
+  //Timer1.Enabled := TRUE;
+end;
+
+procedure TFrmTCPMain.Timer1Timer(Sender: TObject);
+begin
+  if not (Assigned(self.ClientConnection) or
+          assigned(self.clientconnection.ClientSocket))
+    then
+      begin
+        RemoteAdd.Text := '';
+        RemotePort.text := '';
+      end;
+end;
+
+procedure TFrmTCPMain.ConnectActExecute(Sender: TObject);
+begin
+  TCPServer1.LocalPort := self.port.text;
+  TCPserver1.OnReceive := OnReciveData;
+  TCPServer1.Active := not TcpServer1.Listening;
+  self.IP_Address.text := tcpserver1.LocalHostAddr;
+  self.Port.text := TCPServer1.localport;
+  ClientConnection.TCPServer1 := TcpServer1;
+ // if TCPServer1.active
+ //   then ClientConnection.Resume
+  //  else ClientConnection.Suspend;
+end;
+
+{ TconnectionMon }
+
+procedure TconnectionMon.Execute;
+var
+  buff: array[0..2047] of byte;
+  ClientSocket: TcustomIpClient;
+begin
+  inherited;
+ // ClientSocket := TCustomIpClient.Create(nil);
+  repeat
+    if TCPserver1.active and ((TcpServer1.RemoteHost <> '') or
+                               TcpServer1.WaitForConnection)
+      then
+        begin
+         { TCPServer1.Accept;
+          repeat
+            if TCPServer1.WaitForData(50)
+              then
+                begin
+                  tcpserver1.ReceiveBuf(buff, sizeof(buff));
+                end;
+            sleep(0);
+            application.ProcessMessages;
+          until Tcpserver1.remotehost = '';
+          while assigned(self.ClientSocket) and (Self.ClientSocket.Connected) do
+            begin
+              sleep(0); // wait here until connection over
+              TCPServer1.WaitForData(10000);
+            end;  }
+          //FreeAndNil(ClientSocket);
+        end;
+  until terminated;
+  //FreeAndNIl(ClientSocket);
+end;
+
+procedure TFrmTCPMain.FormCreate(Sender: TObject);
+begin
+  ClientConnection := TconnectionMon.Create(TRUE);
+end;
+
+procedure TFrmTCPMain.FormDestroy(Sender: TObject);
+begin
+  FreeAndNil(ClientConnection);
+end;
+
+procedure TFrmTCPMain.TcpServer1GetThread(Sender: TObject;
+  var ClientSocketThread: TClientSocketThread);
+begin
+  sysutils.Beep;
+end;
+
+procedure TFrmTCPMain.TcpServer1Listening(Sender: TObject);
+begin
+  sysutils.Beep;
+end;
+
+procedure TFrmTCPMain.onReciveData(Sender: TObject; Buf: pchar;
+  var DataLen: Integer);
+var
+  Astr: string;
+  index: integer;
+  Achar: Pchar;
+begin
+  Astr := '';
+  Achar := buf;
+  for index := 1 to datalen do
+    begin
+      Astr := astr + Achar^;
+      INC(Achar);
+    end;
+  self.IncommingData.lines.add(Astr);
+end;
+
+procedure TFrmTCPMain.SendActExecute(Sender: TObject);
+begin
+  OutBuff := self.SendData.text;
+  SendData.text := '';
+end;
+
+procedure TFrmTCPMain.DoDisconnect(sender: Tobject);
+begin
+  Fconnected := FALSE;
+  RemoteAdd.text := '';
+  RemotePort.text := '';
+end;
+
+procedure TFrmTCPMain.DoSocketClosed(var msg: tmessage);
+begin
+  Fconnected := FALSE;
+end;
+
+procedure TFrmTCPMain.DisconnectActUpdate(Sender: TObject);
+begin
+  DisconnectAct.Enabled := Fconnected;
+end;
+
+procedure TFrmTCPMain.DisconnectActExecute(Sender: TObject);
+begin
+  if assigned(clientsocket)
+    then ClientSocket.Disconnect;
+end;
+
+end. {Unit}

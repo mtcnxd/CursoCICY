@@ -1,0 +1,8 @@
+>>> Warning 201 "C:\Users\Alex\Documents\Curso Feb 2011\Ethernet\Más Ejemplos Ethernet\tcpip\helpers.c" Line 189(1,1): Assignment inside relational expression
+>>> Warning 201 "C:\Users\Alex\Documents\Curso Feb 2011\Ethernet\Más Ejemplos Ethernet\tcpip\helpers.c" Line 264(1,1): Assignment inside relational expression
+>>> Warning 206 "ex13b.c" Line 110(1,1): Variable of this data type is never greater than this constant
+>>> Warning 202 "C:\Users\Alex\Documents\Curso Feb 2011\Ethernet\Más Ejemplos Ethernet\ccstcpip.h" Line 160(6,23): Variable never used:   ExampleIPDatagram
+>>> Warning 202 "C:\Users\Alex\Documents\Curso Feb 2011\Ethernet\Más Ejemplos Ethernet\ccstcpip.h" Line 166(6,22): Variable never used:   ExampleUDPPacket
+>>> Warning 202 "ex13b.c" Line 80(21,27): Variable never used:   remote
+      Memory usage:   ROM=61%      RAM=23% - 32%
+      0 Errors,  6 Warnings.

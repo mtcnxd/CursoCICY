@@ -1,0 +1,17 @@
+UPD.EXE
+---------------------------------------------------------------------
+To be used with EX12.C.  A PC application that uses UDP to talk
+to a PIC using the EX12.C firmware.
+
+TCPSERVER.EXE
+---------------------------------------------------------------------
+To be used with EX13.C firmware.  The PC will act as a TCP server
+listening to requests on port 1000.  The PIC will then connect
+to the PC.
+
+TCP_CLIENT.EXE
+---------------------------------------------------------------------
+To be used with EX13B.C firmware.  The opposite of TCPSERVER.EXE,
+this makes the PC a TCP client that connects to a PIC that is
+running EX13B.C firmware.  The PIC listens to port 1000 for incoming
+connection requests.

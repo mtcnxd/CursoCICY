@@ -1,0 +1,157 @@
+unit TCP_client_mainU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Sockets, StdCtrls, ActnList, XPStyleActnCtrls,
+  ActnMan, ExtCtrls, winsock;
+
+const
+  WM_SOCKET_CLOSED = WM_USER + $37;
+
+type
+  TFrmTCPMain = class(TForm)
+    IP_Address: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Port: TEdit;
+    IncommingData: TMemo;
+    Label3: TLabel;
+    SendData: TMemo;
+    Label4: TLabel;
+    Button1: TButton;
+    SendButt: TButton;
+    TcpClient1: TTcpClient;
+    ActionManager1: TActionManager;
+    ConnectAct: TAction;
+    SendAct: TAction;
+    Timer1: TTimer;
+    procedure Timer1Timer(Sender: TObject);
+    procedure TcpClient1Error(Sender: TObject; SocketError: Integer);
+    procedure TcpClient1Disconnect(Sender: TObject);
+    procedure TcpClient1Connect(Sender: TObject);
+    procedure SendActExecute(Sender: TObject);
+    procedure TcpClient1Receive(Sender: TObject; Buf: PAnsiChar;
+      var DataLen: Integer);
+    procedure ConnectActExecute(Sender: TObject);
+    procedure SendActUpdate(Sender: TObject);
+    procedure ConnectActUpdate(Sender: TObject);
+    procedure DoSocketClosed(var msg: tmessage); message WM_SOCKET_CLOSED;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTCPMain: TFrmTCPMain;
+
+implementation
+
+{$R *.dfm}
+
+{----------------------------------------------------------------}
+{ Update captions                                                }
+{----------------------------------------------------------------}
+
+procedure TFrmTCPMain.ConnectActUpdate(Sender: TObject);
+const
+  CAPTIONS: array[boolean] of string[10] = ('Connect', 'Disconnect');
+begin
+  (sender as Taction).caption := CAPTIONS[TcpClient1.connected];
+end;
+
+procedure TFrmTCPMain.SendActUpdate(Sender: TObject);
+begin
+  (Sender as Taction).enabled := TcpClient1.connected and
+                                 (SendData.Text <> '');
+end;
+
+{--------------------------------------------------------------}
+{ Connect or disconnect when button is pushed                  }
+{--------------------------------------------------------------}
+procedure TFrmTCPMain.ConnectActExecute(Sender: TObject);
+begin
+  if TcpClient1.Connected
+    then TcpClient1.Disconnect
+    else
+      begin
+        TCPClient1.RemoteHost := self.IP_Address.Text;
+        TCPClient1.RemotePort := self.Port.Text;
+        screen.Cursor := crhourglass;
+        try
+          ConnectAct.enabled := FALSE;
+          TCPClient1.Connect;
+        finally
+          ConnectAct.enabled := TRUE;
+          screen.cursor := crdefault;
+        end;
+      end;
+end;
+
+procedure TFrmTCPMain.TcpClient1Receive(Sender: TObject; Buf: PAnsiChar;
+  var DataLen: Integer);
+var
+  Astr: string;
+  Achar: Pchar;
+  index: integer;
+begin
+  Astr := '';
+  Achar := buf;
+  for index := 1 to datalen do
+    begin
+      Astr := Astr + char(Achar^);
+      INC(Achar);
+    end;
+  self.incommingData.lines.add(Astr);
+end;
+
+procedure TFrmTCPMain.SendActExecute(Sender: TObject);
+begin
+  TcpClient1.SendBuf(pchar(self.SendData.text)^, length(senddata.text), 0);
+  SendData.Clear;
+end;
+
+{-----------------------------------------------------------------}
+{ Let's make it so that you can't change the IP address and port  }
+{ while connected                                                 }
+{-----------------------------------------------------------------}
+procedure TFrmTCPMain.TcpClient1Connect(Sender: TObject);
+begin
+  IP_address.ReadOnly := TRUE;
+  Port.readOnly := TRUE;
+  WSAAsyncSelect(tcpclient1.Handle, self.Handle, WM_SOCKET_CLOSED, FD_CLOSE);
+end;
+
+{--------------------------------------------------------------------}
+{ Let the user edit the IP address and port while not connected      }
+{--------------------------------------------------------------------}
+procedure TFrmTCPMain.TcpClient1Disconnect(Sender: TObject);
+begin
+  IP_address.readonly := FALSE;
+  Port.readOnly := FALSE;
+end;
+
+procedure TFrmTCPMain.TcpClient1Error(Sender: TObject; SocketError: Integer);
+begin
+  self.IncommingData.lines.add('SOCKET ERROR #' + inttostr(SocketError));
+end;
+
+procedure TFrmTCPMain.Timer1Timer(Sender: TObject);
+var
+  Buf: array[0..2048] of char;
+begin
+  if TCPClient1.Connected and TCPClient1.WaitForData(50)
+    then
+      begin
+        TCPClient1.ReceiveBuf(buf, sizeof(buf));
+      end;
+end;
+
+procedure TFrmTCPMain.DoSocketClosed(var msg: tmessage);
+begin
+  tcpclient1.Disconnect;
+end;
+
+end. {Unit}

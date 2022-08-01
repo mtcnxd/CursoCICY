@@ -1,0 +1,164 @@
+unit UDP_mainU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Sockets, StdCtrls, ActnList, XPStyleActnCtrls,
+  ActnMan, ExtCtrls, winsock, JvComponent, JvHidControllerClass, IdUDPClient,
+  IdBaseComponent, IdComponent, IdUDPBase, IdUDPServer, idGlobal,
+  IdSocketHandle;
+
+const
+  WM_SOCKET_CLOSED = WM_USER + $37;
+
+type
+  TFrmTCPMain = class(TForm)
+    IP_Address: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    SourcePort: TEdit;
+    IncommingData: TMemo;
+    Label3: TLabel;
+    SendData: TMemo;
+    Label4: TLabel;
+    SendButt: TButton;
+    ActionManager1: TActionManager;
+    ConnectAct: TAction;
+    SendAct: TAction;
+    Label5: TLabel;
+    DestPort: TEdit;
+    Button1: TButton;
+    RemoteHost: TEdit;
+    Label6: TLabel;
+    IdUDPServer1: TIdUDPServer;
+    IdUDPClient1: TIdUDPClient;
+    procedure SendActUpdate(Sender: TObject);
+    procedure ConnectActUpdate(Sender: TObject);
+    procedure IdUDPServer1UDPRead(Sender: TObject; AData: TBytes;
+      ABinding: TIdSocketHandle);
+    procedure IdUDPServer1UDPException(Sender: TObject;
+      ABinding: TIdSocketHandle; const AMessage: string;
+      const AExceptionClass: TClass);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ConnectActExecute(Sender: TObject);
+    procedure SendActExecute(Sender: TObject);
+  private
+    { Private declarations }
+    FportClosing: boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTCPMain: TFrmTCPMain;
+
+//******************************************************************
+implementation
+//******************************************************************
+
+{$R *.dfm}
+
+
+{----------------------------------------------------------------*
+* Send action:                                                   *
+*   Send data to UDP client                                      *
+*----------------------------------------------------------------}
+procedure TFrmTCPMain.SendActExecute(Sender: TObject);
+begin
+  IdUDPClient1.Send(SendData.Lines.Text);
+  Senddata.lines.Clear;
+end;
+
+{-----------------------------------------------------------------*
+* ConnectAct action:                                              *
+*   Open or close the UDP port                                    *
+*-----------------------------------------------------------------}
+procedure TFrmTCPMain.ConnectActExecute(Sender: TObject);
+var
+  add: TSockAddr;
+begin
+  if not IDUDPclient1.Active
+    then
+      begin
+        IdUDPServer1.DefaultPort := strtoint(SourcePort.text);
+        IdUDPClient1.Host := remotehost.text;
+        IDUDPClient1.Port := strtoint(destport.text);
+        FportClosing := FALSE;
+        IdUDPClient1.Active := TRUE;
+        IdUDPServer1.Active := TRUE;
+        SourcePort.REadOnly := TRUE;
+        RemoteHost.readonly := TRUE;
+        DestPort.readonly := TRUE;
+      end
+    else
+      begin
+        FportClosing := TRUE;
+        IdUDPClient1.Active := FALSE;
+        IdUDPServer1.Active := FALSE;
+
+        SourcePort.readonly := FALSE;
+        RemoteHost.readonly := FALSE;
+        DestPort.readonly := FALSE;
+      end;
+end;
+
+{-----------------------------------------------------------------------*
+* FormClose Method:                                                     *
+*   When the form closes, be sure ports are closed                      *
+*-----------------------------------------------------------------------}
+procedure TFrmTCPMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  IdUDPServer1.Active := FALSE;
+  IdUDPClient1.active := FALSE;
+end;
+
+
+{------------------------------------------------------------------------*
+* IdUDPServer1 Exception:                                                *
+*   Write exceptions out to data log                                     *
+*------------------------------------------------------------------------}
+procedure TFrmTCPMain.IdUDPServer1UDPException(Sender: TObject;
+  ABinding: TIdSocketHandle; const AMessage: string;
+  const AExceptionClass: TClass);
+begin
+  if not FportClosing
+    then IncommingData.Lines.Add(Amessage);
+end;
+
+{------------------------------------------------------------------------*
+* IdUDPServer1UDPRead Event:                                             *
+*   Write data out to the incomming data log                             *
+*------------------------------------------------------------------------}
+procedure TFrmTCPMain.IdUDPServer1UDPRead(Sender: TObject; AData: TBytes;
+  ABinding: TIdSocketHandle);
+var
+  index: integer;
+  Astr: string;
+begin
+  for index := low(Adata) to high(Adata) do
+    Astr := astr + char(Adata[index]);
+  Incommingdata.lines.add(Astr);
+end;
+
+{-------------------------------------------------------------------------*
+* ConnectActUpdate:                                                       *
+*   Update the caption on the open port button                            *
+*-------------------------------------------------------------------------}
+procedure TFrmTCPMain.ConnectActUpdate(Sender: TObject);
+const
+  CAPTIONS: array[boolean] of string[10] = ('Open port', 'Close port');
+begin
+  ConnectAct.Caption := CAPTIONS[IdUDPServer1.active];
+end;
+
+{-------------------------------------------------------------------------*
+* SendActUpdate:                                                          *
+*   Enable/disable the send button if data can be send                    *
+*-------------------------------------------------------------------------}
+procedure TFrmTCPMain.SendActUpdate(Sender: TObject);
+begin
+  SendAct.Enabled := idUDPServer1.Active and (senddata.Text <> '');
+end;
+
+end. {Unit}

@@ -1,0 +1,123 @@
+000     @SCRATCH
+001     @SCRATCH
+001     _RETURN_
+002     @SCRATCH
+003     @SCRATCH
+004     @SCRATCH
+005     rs232_errors
+006-007 MAIN.c
+008-009 MAIN.L1
+00A     lcd_init.i
+00A-00B @PRINTF_LU_116.P1
+00A-00B @PRINTF_LU_84.P2
+00A     Alux_ADC_1.BK_TRISA
+00A     MAIN.@SCRATCH1
+00B     Alux_ADC_1.BK_ADCON1
+00B     lcd_init.@SCRATCH1
+00B     MAIN.@SCRATCH2
+00C     @PRINTF_LU_84.@SCRATCH1
+00C     @PRINTF_LU_116.@SCRATCH1
+00D     @PRINTF_LU_84.@SCRATCH2
+00D     @PRINTF_LU_116.@SCRATCH2
+00E     @PRINTF_LU_84.@SCRATCH3
+00E     @PRINTF_LU_116.@SCRATCH3
+00F     @PRINTF_LU_84.@SCRATCH4
+00F     @PRINTF_LU_116.@SCRATCH4
+010     @PRINTF_LU_84.@SCRATCH5
+010     @PRINTF_LU_116.@SCRATCH5
+011     @PRINTF_LU_84.@SCRATCH6
+011     @PRINTF_LU_116.@SCRATCH6
+012     @PRINTF_LU_84.@SCRATCH7
+012     @PRINTF_LU_116.@SCRATCH7
+013     lcd_putc.c
+013     @PUTCHAR_BIU_1.P1
+014     lcd_gotoxy.x
+014     @delay_ms1.P1
+015     lcd_gotoxy.y
+016     lcd_gotoxy.address
+017     lcd_gotoxy.@SCRATCH1
+018     lcd_send_byte.address
+019     lcd_send_byte.n
+01A     lcd_read_byte.low
+01A     lcd_send_byte.@SCRATCH1
+01B     lcd_read_byte.high
+01B     lcd_send_nibble.n
+01C     lcd_read_byte.@SCRATCH1
+025     g_InBootloader
+F80     PORTA
+F81     lcd
+F81     PORTB
+F82     PORTC
+F8A     lcdlat
+F92     TRISA
+F93     TRISB
+F93     lcdtris
+F94     TRISC
+FB4.6   C1OUT
+FB4.7   C2OUT
+FBB     CCP_2_LOW
+FBB     CCP_2
+FBC     CCP_2_HIGH
+FBE     CCP_1_LOW
+FBE     CCP_1
+FBF     CCP_1_HIGH
+FC1     ADCON1
+FE9-FEA @WRITE_PROGRAM_MEMORY.P1
+FE9-FEA @READ_PROGRAM_MEMORY.P2
+FF6-FF8 @WRITE_PROGRAM_MEMORY.P1
+FF6-FF8 @READ_PROGRAM_MEMORY.P2
+
+ROM Allocation:
+2050  @delay_ms1
+2008  LCD_INIT_STRING
+20A4  lcd_read_byte
+2098  lcd_read_nibble
+2078  lcd_send_nibble
+20EA  lcd_send_byte
+211E  lcd_init
+217E  lcd_gotoxy
+21A0  lcd_putc
+21FC  Alux_ADC_1
+2300  @PUTCHAR_BIU_1
+21E4  @GETCH_BIU_1
+23BE  MAIN
+201C  @const127
+224C  @PRINTF_LU_84
+2038  @const133
+230A  @PRINTF_LU_116
+23BE  @cinit
+
+
+User Memory space: 
+
+Project Directory:
+    D:\CURSO 2011\Entrada y Salida de Datos por Bluetooth\Bluetooth\
+
+Project Files:
+    BluetoothPic2.c
+    C:\Program Files\PICC\devices\18F2550.h
+    C:\Program Files\PICC\drivers\usb_bootloader.h
+    C:\Program Files\PICC\drivers\lcd.c
+    alux.h
+
+Units:
+    D:\CURSO 2011\Entrada y Salida de Datos por Bluetooth\Bluetooth\BluetoothPic2.c (main)
+
+Compiler Settings:
+    Processor:      PIC18F2550
+    Pointer Size:   16
+    ADC Range:      0-1023
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      BluetoothPic2.err
+    Ext Symbols: BluetoothPic2.esym
+    INHX32:      BluetoothPic2.hex
+    Symbols:     BluetoothPic2.sym
+    List:        BluetoothPic2.lst
+    Debug/COFF:  BluetoothPic2.cof
+    Project:     BluetoothPic2.PJT
+    Call Tree:   BluetoothPic2.tre
+    Statistics:  BluetoothPic2.sta

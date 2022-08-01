@@ -1,0 +1,79 @@
+//PROGRAMA PARA COMUNICAR LA PC CON EL V DRIVE UTILIZANDO COMO INTERFACE LA TARJETA ALUX 1.0
+//CENTRO DE INVESTIGACIÓN CIENTÍFICA DE YUCATÁN, A. C.
+//PROGRAMÓ: JULIO LUGO
+//FECHA: 01 SEP 2010
+//LUGAR: MERIDA, YUCATÁN.
+
+//SI UTILIZAMOS UN PIC18F4550 SUSTITUIR #include <18F2455.h> POR #include<18F4550>
+   #include <18F2550.h>                               //DIRECTIVA PARA ESPECIFICAR EL CHIP A UTILIZAR
+   #fuses HSPLL,NOWDT,NOPROTECT,NOLVP,NODEBUG,USBDIV,PLL2,CPUDIV1,VREGEN,NOPBADEN   //FUSIBLES
+   
+//DEFINIMOS LA CANTIDAD DE BITS UTILIZADOS POR EL ADC
+   #device ADC=8
+   
+//FRECUENCIA A CONSIDERAR EN LOS COMANDOS DE RETARDO                                                   
+   #use delay(clock=48000000)
+
+//DIRECTIVAS PARA CARGA CON EL BOOTLOADER
+   #include <usb_bootloader.h>
+   
+   //#use    RS232  (UART1, BAUD=9600, PARITY=N, BITS=8, STOP=1, DISABLE_INTS )  //SIN DISABLE INTS SE ATORA DESPUES DE RECIBIR EL 1ER CARACTER
+   #use rs232(UART1, baud=9600, DISABLE_INTS, errors)
+
+union {                                            //SE DEFINE UNA UNION PARA PODER MANEJAR UNA MISMA VARIABLE                                                  
+   unsigned char _byte;                            //POR BYTE Y TAMBIEN POR BIT INDIVIDUAL
+   struct {
+     short B0:1;
+     short B1:1;
+     short B2:1;
+     short B3:1;
+     short B4:1;
+     short B5:1;
+     short B6:1;
+     short B7:1;
+   };
+}PORTA,PORTB,botones;                              //SE CREAN PORTA, PORTB Y BOTONES
+
+#byte PORTA = 0xF80                                //SE ASIGNA FORZA A PORTA A TOMAR LA DIR DE 0xF80 (PUERTO A EN EL PIC18F2455) 
+#byte PORTB = 0xF81                                //SE FORZA A PORTB A TOMAR LA DIR DE 0xF81        (PUERTO B EN EL PIC18F2455) 
+   
+//DEFINICIÓN DE OTRAS DIRECTIVAS
+   #use fast_io(a)                                    //PARA QUE EL COMPILADOR NO GENERE CÓDIGO ADICIONAL EN LLAMADAS AL PTO A
+   #use fast_io(b)                                    //PARA QUE EL COMPILADOR NO GENERE CÓDIGO ADICIONAL EN LLAMADAS AL PTO B
+   
+void main(void) 
+{
+   char c;
+      output_low(PIN_C0);      //Reset DF-Bluetooth a VCC.
+      delay_ms(2000);
+      output_high(PIN_C0);     //Reset DF-Bluetooth a VCC.
+ 
+      set_tris_b(0x00);
+      output_b(0x00);
+   
+      while (TRUE)    {
+
+         if (kbhit())        {
+            c=getc();
+            switch (c) {
+            case '1': if(!PORTB.B0) PORTB.B0=1; else PORTB.B0=0; break;
+            case '2': if(!PORTB.B1) PORTB.B1=1; else PORTB.B1=0; break;
+            case '3': if(!PORTB.B2) PORTB.B2=1; else PORTB.B2=0; break;
+            case '4': if(!PORTB.B3) PORTB.B3=1; else PORTB.B3=0; break;
+            case '5': if(!PORTB.B4) PORTB.B4=1; else PORTB.B4=0; break;
+            case '6': if(!PORTB.B5) PORTB.B5=1; else PORTB.B5=0; break;
+            case '7': if(!PORTB.B6) PORTB.B6=1; else PORTB.B6=0; break;
+            case '8': if(!PORTB.B7) PORTB.B7=1; else PORTB.B7=0; break;
+            }
+         }
+        
+         //putc(c);
+         if (!PORTA.B1) { printf("Alarma #1%c\n\r",7); delay_ms(1000); }
+         if (!PORTA.B2) { printf("Alarma #2%c\n\r",7); delay_ms(1000); }
+         if (!PORTA.B3) { printf("Alarma #3%c\n\r",7); delay_ms(1000); }
+         if (!PORTA.B4) { printf("Alarma #4%c\n\r",7); delay_ms(1000); }
+         if (!PORTA.B5) { printf("Alarma #5%c\n\r",7); delay_ms(1000); }
+                     
+      
+      }
+}

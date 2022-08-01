@@ -1,0 +1,505 @@
+CCS PCH C Compiler, Version 4.099, 49659               18-feb-11 18:24
+
+               Filename: D:\CURSO 2011\Entrada y Salida de Datos por Bluetooth\Bluetooth\BluetoothPic.lst
+
+               ROM used: 752 bytes (2%)
+                         Largest free fragment is 23820
+               RAM used: 10 (0%) at main() level
+                         11 (1%) worst case
+               Stack:    1 locations
+
+*
+2000:  GOTO   20E8
+.................... //PROGRAMA PARA COMUNICAR LA PC CON EL V DRIVE UTILIZANDO COMO INTERFACE LA TARJETA ALUX 1.0 
+.................... //CENTRO DE INVESTIGACIÓN CIENTÍFICA DE YUCATÁN, A. C. 
+.................... //PROGRAMÓ: JULIO LUGO 
+.................... //FECHA: 01 SEP 2010 
+.................... //LUGAR: MERIDA, YUCATÁN. 
+....................  
+.................... //SI UTILIZAMOS UN PIC18F4550 SUSTITUIR #include <18F2455.h> POR #include<18F4550> 
+....................    #include <18F2550.h>                               //DIRECTIVA PARA ESPECIFICAR EL CHIP A UTILIZAR 
+.................... //////// Standard Header file for the PIC18F2550 device //////////////// 
+.................... #device PIC18F2550 
+.................... #list 
+....................  
+....................    #fuses HSPLL,NOWDT,NOPROTECT,NOLVP,NODEBUG,USBDIV,PLL2,CPUDIV1,VREGEN,NOPBADEN   //FUSIBLES 
+....................     
+.................... //DEFINIMOS LA CANTIDAD DE BITS UTILIZADOS POR EL ADC 
+....................    #device ADC=8 
+....................     
+.................... //FRECUENCIA A CONSIDERAR EN LOS COMANDOS DE RETARDO                                                    
+....................    #use delay(clock=48000000) 
+*
+209E:  CLRF   FEA
+20A0:  MOVLW  09
+20A2:  MOVWF  FE9
+20A4:  MOVF   FEF,W
+20A6:  BZ    20C4
+20A8:  MOVLW  0F
+20AA:  MOVWF  01
+20AC:  CLRF   00
+20AE:  DECFSZ 00,F
+20B0:  BRA    20AE
+20B2:  DECFSZ 01,F
+20B4:  BRA    20AC
+20B6:  MOVLW  8F
+20B8:  MOVWF  00
+20BA:  DECFSZ 00,F
+20BC:  BRA    20BA
+20BE:  NOP   
+20C0:  DECFSZ FEF,F
+20C2:  BRA    20A8
+20C4:  RETLW  00
+....................  
+.................... //DIRECTIVAS PARA CARGA CON EL BOOTLOADER 
+....................    #include <usb_bootloader.h> 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////                                                                   //// 
+.................... ////                     USB_BOOTLOADER.H                              //// 
+.................... ////                                                                   //// 
+.................... ////  This include file must be included by any application loaded     //// 
+.................... ////  by the example USB bootloader (ex_usb_bootloader                 //// 
+.................... ////                                                                   //// 
+.................... ////  The directives in this file relocate the reset and interrupt     //// 
+.................... ////  vectors as well as reserving space for the bootloader.           //// 
+.................... ////                                                                   //// 
+.................... ////  For more documentation see ex_usb_bootloader.c                   //// 
+.................... ////                                                                   //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////                                                                   //// 
+.................... //// VERSION HISTORY                                                   //// 
+.................... ////                                                                   //// 
+.................... //// March 5th, 2009:                                                  //// 
+.................... ////   Cleanup for Wizard.                                             //// 
+.................... ////   PIC24 Initial release.                                          //// 
+.................... ////                                                                   //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996,2009 Custom Computer Services           //// 
+.................... //// This source code may only be used by licensed users of the CCS    //// 
+.................... //// C compiler.  This source code may only be distributed to other    //// 
+.................... //// licensed users of the CCS C compiler.  No other use,              //// 
+.................... //// reproduction or distribution is permitted without written         //// 
+.................... //// permission.  Derivative programs created using this software      //// 
+.................... //// in object code form are not restricted in any way.                //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+....................  
+.................... //how big is the bootloader? 
+.................... //the bootloader will reside from address 0x0000 to this location.  the 
+.................... //application will then sit at this location+1 to the end of program memory. 
+.................... //#if defined(__DEBUG) 
+.................... #define LOADER_SIZE        (0x1FFF) 
+.................... //#else 
+.................... //#define LOADER_SIZE        (0x17FF) 
+.................... //#endif 
+....................  
+.................... //the loader and application need a common flag that determines if we are in 
+.................... //the bootloader or application, that way the ISR knows where to go.  this 
+.................... //is the location in ram that is reserved for this flag. 
+.................... #define LOC_IN_LOADER_FLAG  0x25 
+....................  
+.................... //// --- end configuration --- //////////////////////////////////////////// 
+....................  
+.................... #reserve LOC_IN_LOADER_FLAG 
+....................  
+.................... int8 g_InBootloader; 
+.................... #locate g_InBootloader=LOC_IN_LOADER_FLAG 
+....................  
+.................... #define LOADER_START       (0) 
+.................... #define LOADER_END         (LOADER_SIZE) 
+.................... #define APPLICATION_START  (LOADER_SIZE+1) 
+.................... #if defined(__USB_87J50__) 
+....................  #define APPLICATION_END    (getenv("PROGRAM_MEMORY")-9) //configuration bits 
+.................... #else 
+....................  #define APPLICATION_END    (getenv("PROGRAM_MEMORY")-1) 
+.................... #endif  
+.................... #define APPLICATION_ISR    (APPLICATION_START+8) 
+....................  
+.................... #ifdef _bootloader 
+....................  /* 
+....................   Provide an empty application, so if you load this .HEX file into the pic 
+....................   without an application this will prevent the pic from executing unknown code. 
+....................  */ 
+....................  #org APPLICATION_START,APPLICATION_START+0xF 
+....................  void BlankApplication(void)  
+....................  { 
+....................    while(TRUE); 
+....................  } 
+....................  
+....................  //we need to prevent the loader from using application space 
+....................  #if (APPLICATION_END > 0x10000) 
+....................    #org APPLICATION_START+0x10, 0xFFFF {} 
+....................    #if (APPLICATION_END > 0x20000) 
+....................       #org 0x10000, 0x1FFFF {} 
+....................       #org 0x20000, APPLICATION_END {} 
+....................    #else 
+....................       #org 0x10000, APPLICATION_END {} 
+....................    #endif 
+....................  #else 
+....................    #org APPLICATION_START+0x10, APPLICATION_END {} 
+....................  #endif 
+....................  
+....................    #define  USB_CONFIG_PID       0x0034 
+....................  
+....................    #define USB_STRINGS_OVERWRITTEN 
+....................    char USB_STRING_DESC_OFFSET[]={0,4,12}; 
+....................  
+....................    // Here is where the "CCS" Manufacturer string and "SERIAL DEMO" are stored. 
+....................    // Strings are saved as unicode. 
+....................    // These strings are mostly only displayed during the add hardware wizard. 
+....................    // Once the operating system drivers have been installed it will usually display 
+....................    // the name from the drivers .INF. 
+....................    char const USB_STRING_DESC[]={ 
+....................       //string 0 
+....................             4, //length of string index 
+....................             0x03, //USB_DESC_STRING_TYPE, //descriptor type 0x03 (STRING) 
+....................             0x09,0x04,   //Microsoft Defined for US-English 
+....................       //string 1  - manufacturer 
+....................             8, //length of string index 
+....................             0x03, //USB_DESC_STRING_TYPE, //descriptor type 0x03 (STRING) 
+....................             'C',0, 
+....................             'C',0, 
+....................             'S',0, 
+....................       //string 2 - product 
+....................             30, //length of string index 
+....................             0x03, //USB_DESC_STRING_TYPE, //descriptor type 0x03 (STRING) 
+....................             'C',0, 
+....................             'D',0, 
+....................             'C',0, 
+....................             ' ',0, 
+....................             'B',0, 
+....................             'o',0, 
+....................             'o',0, 
+....................             't',0, 
+....................             'l',0, 
+....................             'o',0, 
+....................             'a',0, 
+....................             'd',0, 
+....................             'e',0, 
+....................             'r',0 
+....................    }; 
+.................... #endif   //_bootloader 
+....................  
+.................... #ifndef _bootloader 
+....................  //in the application, this moves the reset and isr vector out of the bootload 
+....................  //space.  it then reserves the loader space from being used by the application. 
+....................  #build(reset=APPLICATION_START, interrupt=APPLICATION_ISR) 
+....................  #org 0, LOADER_END {} 
+.................... #endif 
+....................  
+....................     
+....................    //#use    RS232  (UART1, BAUD=9600, PARITY=N, BITS=8, STOP=1, DISABLE_INTS )  //SIN DISABLE INTS SE ATORA DESPUES DE RECIBIR EL 1ER CARACTER 
+....................    #use rs232(UART1, baud=9600, DISABLE_INTS, errors) 
+20C6:  BTFSS  F9E.5
+20C8:  BRA    20C6
+20CA:  MOVFF  FAB,05
+20CE:  MOVFF  FAE,01
+20D2:  BTFSS  05.1
+20D4:  BRA    20DA
+20D6:  BCF    FAB.4
+20D8:  BSF    FAB.4
+20DA:  GOTO   2132 (RETURN)
+20DE:  BTFSS  F9E.4
+20E0:  BRA    20DE
+20E2:  MOVFF  09,FAD
+20E6:  RETLW  00
+....................  
+.................... union {                                            //SE DEFINE UNA UNION PARA PODER MANEJAR UNA MISMA VARIABLE                                                   
+....................    unsigned char _byte;                            //POR BYTE Y TAMBIEN POR BIT INDIVIDUAL 
+....................    struct { 
+....................      short B0:1; 
+....................      short B1:1; 
+....................      short B2:1; 
+....................      short B3:1; 
+....................      short B4:1; 
+....................      short B5:1; 
+....................      short B6:1; 
+....................      short B7:1; 
+....................    }; 
+.................... }PORTA,PORTB,botones;                              //SE CREAN PORTA, PORTB Y BOTONES 
+....................  
+.................... #byte PORTA = 0xF80                                //SE ASIGNA FORZA A PORTA A TOMAR LA DIR DE 0xF80 (PUERTO A EN EL PIC18F2455)  
+.................... #byte PORTB = 0xF81                                //SE FORZA A PORTB A TOMAR LA DIR DE 0xF81        (PUERTO B EN EL PIC18F2455)  
+....................     
+.................... //DEFINICIÓN DE OTRAS DIRECTIVAS 
+....................    #use fast_io(a)                                    //PARA QUE EL COMPILADOR NO GENERE CÓDIGO ADICIONAL EN LLAMADAS AL PTO A 
+....................    #use fast_io(b)                                    //PARA QUE EL COMPILADOR NO GENERE CÓDIGO ADICIONAL EN LLAMADAS AL PTO B 
+....................     
+.................... void main(void)  
+.................... { 
+20E8:  CLRF   FF8
+20EA:  BCF    FD0.7
+20EC:  CLRF   FEA
+20EE:  CLRF   FE9
+20F0:  BSF    FB8.3
+20F2:  MOVLW  E1
+20F4:  MOVWF  FAF
+20F6:  MOVLW  04
+20F8:  MOVWF  FB0
+20FA:  MOVLW  A6
+20FC:  MOVWF  FAC
+20FE:  MOVLW  90
+2100:  MOVWF  FAB
+2102:  MOVF   FC1,W
+2104:  ANDLW  C0
+2106:  IORLW  0F
+2108:  MOVWF  FC1
+210A:  MOVLW  07
+210C:  MOVWF  FB4
+210E:  CLRF   05
+....................    char c; 
+....................       output_low(PIN_C0);      //Reset DF-Bluetooth a VCC. 
+2110:  BCF    F94.0
+2112:  BCF    F8B.0
+....................       delay_ms(2000); 
+2114:  MOVLW  08
+2116:  MOVWF  08
+2118:  MOVLW  FA
+211A:  MOVWF  09
+211C:  RCALL  209E
+211E:  DECFSZ 08,F
+2120:  BRA    2118
+....................       output_high(PIN_C0);     //Reset DF-Bluetooth a VCC. 
+2122:  BCF    F94.0
+2124:  BSF    F8B.0
+....................   
+....................       set_tris_b(0x00); 
+2126:  MOVLW  00
+2128:  MOVWF  F93
+....................       output_b(0x00); 
+212A:  CLRF   F8A
+....................     
+....................       while (TRUE)    { 
+....................  
+....................          if (kbhit())        { 
+212C:  BTFSS  F9E.5
+212E:  BRA    21A4
+....................             c=getc(); 
+2130:  BRA    20C6
+2132:  MOVFF  01,07
+....................             switch (c) { 
+2136:  MOVLW  31
+2138:  SUBWF  07,W
+213A:  ADDLW  F8
+213C:  BC    21A4
+213E:  ADDLW  08
+2140:  GOTO   22CA
+....................             case '1': if(!PORTB.B0) PORTB.B0=1; else PORTB.B0=0; break; 
+2144:  BTFSC  F81.0
+2146:  BRA    214C
+2148:  BSF    F81.0
+214A:  BRA    214E
+214C:  BCF    F81.0
+214E:  BRA    21A4
+....................             case '2': if(!PORTB.B1) PORTB.B1=1; else PORTB.B1=0; break; 
+2150:  BTFSC  F81.1
+2152:  BRA    2158
+2154:  BSF    F81.1
+2156:  BRA    215A
+2158:  BCF    F81.1
+215A:  BRA    21A4
+....................             case '3': if(!PORTB.B2) PORTB.B2=1; else PORTB.B2=0; break; 
+215C:  BTFSC  F81.2
+215E:  BRA    2164
+2160:  BSF    F81.2
+2162:  BRA    2166
+2164:  BCF    F81.2
+2166:  BRA    21A4
+....................             case '4': if(!PORTB.B3) PORTB.B3=1; else PORTB.B3=0; break; 
+2168:  BTFSC  F81.3
+216A:  BRA    2170
+216C:  BSF    F81.3
+216E:  BRA    2172
+2170:  BCF    F81.3
+2172:  BRA    21A4
+....................             case '5': if(!PORTB.B4) PORTB.B4=1; else PORTB.B4=0; break; 
+2174:  BTFSC  F81.4
+2176:  BRA    217C
+2178:  BSF    F81.4
+217A:  BRA    217E
+217C:  BCF    F81.4
+217E:  BRA    21A4
+....................             case '6': if(!PORTB.B5) PORTB.B5=1; else PORTB.B5=0; break; 
+2180:  BTFSC  F81.5
+2182:  BRA    2188
+2184:  BSF    F81.5
+2186:  BRA    218A
+2188:  BCF    F81.5
+218A:  BRA    21A4
+....................             case '7': if(!PORTB.B6) PORTB.B6=1; else PORTB.B6=0; break; 
+218C:  BTFSC  F81.6
+218E:  BRA    2194
+2190:  BSF    F81.6
+2192:  BRA    2196
+2194:  BCF    F81.6
+2196:  BRA    21A4
+....................             case '8': if(!PORTB.B7) PORTB.B7=1; else PORTB.B7=0; break; 
+2198:  BTFSC  F81.7
+219A:  BRA    21A0
+219C:  BSF    F81.7
+219E:  BRA    21A2
+21A0:  BCF    F81.7
+21A2:  BRA    21A4
+....................             } 
+....................          } 
+....................          
+....................          //putc(c); 
+....................          if (!PORTA.B1) { printf("Alarma #1%c\n\r",7); delay_ms(1000); } 
+21A4:  BTFSC  F80.1
+21A6:  BRA    21DE
+21A8:  CLRF   08
+21AA:  MOVF   08,W
+21AC:  RCALL  2008
+21AE:  INCF   08,F
+21B0:  MOVWF  00
+21B2:  MOVFF  00,09
+21B6:  RCALL  20DE
+21B8:  MOVLW  09
+21BA:  SUBWF  08,W
+21BC:  BNZ   21AA
+21BE:  MOVLW  07
+21C0:  MOVWF  09
+21C2:  RCALL  20DE
+21C4:  MOVLW  0A
+21C6:  MOVWF  09
+21C8:  RCALL  20DE
+21CA:  MOVLW  0D
+21CC:  MOVWF  09
+21CE:  RCALL  20DE
+21D0:  MOVLW  04
+21D2:  MOVWF  08
+21D4:  MOVLW  FA
+21D6:  MOVWF  09
+21D8:  RCALL  209E
+21DA:  DECFSZ 08,F
+21DC:  BRA    21D4
+....................          if (!PORTA.B2) { printf("Alarma #2%c\n\r",7); delay_ms(1000); } 
+21DE:  BTFSC  F80.2
+21E0:  BRA    2218
+21E2:  CLRF   08
+21E4:  MOVF   08,W
+21E6:  RCALL  2026
+21E8:  INCF   08,F
+21EA:  MOVWF  00
+21EC:  MOVFF  00,09
+21F0:  RCALL  20DE
+21F2:  MOVLW  09
+21F4:  SUBWF  08,W
+21F6:  BNZ   21E4
+21F8:  MOVLW  07
+21FA:  MOVWF  09
+21FC:  RCALL  20DE
+21FE:  MOVLW  0A
+2200:  MOVWF  09
+2202:  RCALL  20DE
+2204:  MOVLW  0D
+2206:  MOVWF  09
+2208:  RCALL  20DE
+220A:  MOVLW  04
+220C:  MOVWF  08
+220E:  MOVLW  FA
+2210:  MOVWF  09
+2212:  RCALL  209E
+2214:  DECFSZ 08,F
+2216:  BRA    220E
+....................          if (!PORTA.B3) { printf("Alarma #3%c\n\r",7); delay_ms(1000); } 
+2218:  BTFSC  F80.3
+221A:  BRA    2252
+221C:  CLRF   08
+221E:  MOVF   08,W
+2220:  RCALL  2044
+2222:  INCF   08,F
+2224:  MOVWF  00
+2226:  MOVFF  00,09
+222A:  RCALL  20DE
+222C:  MOVLW  09
+222E:  SUBWF  08,W
+2230:  BNZ   221E
+2232:  MOVLW  07
+2234:  MOVWF  09
+2236:  RCALL  20DE
+2238:  MOVLW  0A
+223A:  MOVWF  09
+223C:  RCALL  20DE
+223E:  MOVLW  0D
+2240:  MOVWF  09
+2242:  RCALL  20DE
+2244:  MOVLW  04
+2246:  MOVWF  08
+2248:  MOVLW  FA
+224A:  MOVWF  09
+224C:  RCALL  209E
+224E:  DECFSZ 08,F
+2250:  BRA    2248
+....................          if (!PORTA.B4) { printf("Alarma #4%c\n\r",7); delay_ms(1000); } 
+2252:  BTFSC  F80.4
+2254:  BRA    228C
+2256:  CLRF   08
+2258:  MOVF   08,W
+225A:  RCALL  2062
+225C:  INCF   08,F
+225E:  MOVWF  00
+2260:  MOVFF  00,09
+2264:  RCALL  20DE
+2266:  MOVLW  09
+2268:  SUBWF  08,W
+226A:  BNZ   2258
+226C:  MOVLW  07
+226E:  MOVWF  09
+2270:  RCALL  20DE
+2272:  MOVLW  0A
+2274:  MOVWF  09
+2276:  RCALL  20DE
+2278:  MOVLW  0D
+227A:  MOVWF  09
+227C:  RCALL  20DE
+227E:  MOVLW  04
+2280:  MOVWF  08
+2282:  MOVLW  FA
+2284:  MOVWF  09
+2286:  RCALL  209E
+2288:  DECFSZ 08,F
+228A:  BRA    2282
+....................          if (!PORTA.B5) { printf("Alarma #5%c\n\r",7); delay_ms(1000); } 
+228C:  BTFSC  F80.5
+228E:  BRA    22C6
+2290:  CLRF   08
+2292:  MOVF   08,W
+2294:  RCALL  2080
+2296:  INCF   08,F
+2298:  MOVWF  00
+229A:  MOVFF  00,09
+229E:  RCALL  20DE
+22A0:  MOVLW  09
+22A2:  SUBWF  08,W
+22A4:  BNZ   2292
+22A6:  MOVLW  07
+22A8:  MOVWF  09
+22AA:  RCALL  20DE
+22AC:  MOVLW  0A
+22AE:  MOVWF  09
+22B0:  RCALL  20DE
+22B2:  MOVLW  0D
+22B4:  MOVWF  09
+22B6:  RCALL  20DE
+22B8:  MOVLW  04
+22BA:  MOVWF  08
+22BC:  MOVLW  FA
+22BE:  MOVWF  09
+22C0:  RCALL  209E
+22C2:  DECFSZ 08,F
+22C4:  BRA    22BC
+....................                       
+....................        
+....................       } 
+22C6:  BRA    212C
+.................... } 
+22C8:  SLEEP 
+
+Configuration Fuses:
+   Word  1: 0E21   NOIESO NOFCMEN HSPLL PLL2 CPUDIV1 USBDIV
+   Word  2: 1E3E   BROWNOUT NOWDT BORV20 PUT WDT32768 VREGEN
+   Word  3: 8100   NOPBADEN CCP2C1 MCLR NOLPT1OSC
+   Word  4: 0081   STVREN NODEBUG NOLVP NOXINST
+   Word  5: C00F   NOPROTECT NOCPD NOCPB
+   Word  6: E00F   NOWRT NOWRTD NOWRTC NOWRTB
+   Word  7: 400F   NOEBTR NOEBTRB

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2005/08/05 14:22:08.432.pas,C:\Documents and Settings\Mike1\My Documents\Borland Studio Projects\Unit1.pas=D:\delphi\Projects\TCP Example\TCP_client_mainU.pas</Transaction>
+    <Transaction>2005/08/05 14:22:08.482.dfm,C:\Documents and Settings\Mike1\My Documents\Borland Studio Projects\Unit1.dfm=D:\delphi\Projects\TCP Example\TCP_client_mainU.dfm</Transaction>
+    <Transaction>2005/08/05 15:12:13.213.pas,D:\delphi\Projects\TCP Example\TCP_client_mainU.pas=D:\delphi\Projects\TCP Example\TCP_Server_mainU.pas</Transaction>
+    <Transaction>2005/08/05 15:12:13.233.dfm,D:\delphi\Projects\TCP Example\TCP_client_mainU.dfm=D:\delphi\Projects\TCP Example\TCP_Server_mainU.dfm</Transaction>
+    <Transaction>2005/08/05 15:12:32.671.pas,D:\delphi\Projects\TCP Example\TCP_Server_mainU.pas=</Transaction>
+    <Transaction>2005/08/05 15:12:32.671.dfm,D:\delphi\Projects\TCP Example\TCP_Server_mainU.dfm=</Transaction>
+    <Transaction>2005/08/10 12:22:49.604.pas,D:\delphi\Projects\TCP Example\TCP_client_mainU.pas=D:\delphi\Projects\TCP Example\UDP_mainU.pas</Transaction>
+    <Transaction>2005/08/10 12:22:49.614.dfm,D:\delphi\Projects\TCP Example\TCP_client_mainU.dfm=D:\delphi\Projects\TCP Example\UDP_mainU.dfm</Transaction>
+    <Transaction>2005/08/10 12:23:03.113.pas,D:\delphi\Projects\TCP Example\UDP_mainU.pas=</Transaction>
+    <Transaction>2005/08/10 12:23:03.113.dfm,D:\delphi\Projects\TCP Example\UDP_mainU.dfm=</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2005/08/05 15:12:13.383.pas,D:\delphi\Projects\TCP Example\TCP_client_mainU.pas=D:\delphi\Projects\TCP Example\TCP_Server_mainU.pas</Transaction>
+    <Transaction>2005/08/05 15:12:13.383.dfm,D:\delphi\Projects\TCP Example\TCP_client_mainU.dfm=D:\delphi\Projects\TCP Example\TCP_Server_mainU.dfm</Transaction>
+    <Transaction>2005/08/10 10:15:46.112.pas,D:\delphi\bds\3.0\source\Win32\Internet\Sockets.pas=</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,9 @@
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\helpers.c" Line 189(1,1): Assignment inside relational expression
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\helpers.c" Line 264(1,1): Assignment inside relational expression
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\http.c" Line 175(1,1): Assignment inside relational expression
+>>> Warning 203 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\http.c" Line 611(1,1): Condition always TRUE
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\http.c" Line 702(1,1): Assignment inside relational expression
+>>> Warning 202 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\ccstcpip.h" Line 162(6,23): Variable never used:   ExampleIPDatagram
+>>> Warning 202 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\PIC Ethernet WebServer\tcpip\ccstcpip.h" Line 168(6,22): Variable never used:   ExampleUDPPacket
+      Memory usage:   ROM=87%      RAM=38% - 47%
+      0 Errors,  7 Warnings.

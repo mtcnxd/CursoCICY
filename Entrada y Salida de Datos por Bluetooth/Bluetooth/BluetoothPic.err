@@ -1,0 +1,4 @@
+>>> Warning 202 "BluetoothPic.c" Line 21(8,11): Variable never used:   rs232_errors
+>>> Warning 202 "BluetoothPic.c" Line 35(14,21): Variable never used:   botones
+      Memory usage:   ROM=2%      RAM=0% - 1%
+      0 Errors,  2 Warnings.

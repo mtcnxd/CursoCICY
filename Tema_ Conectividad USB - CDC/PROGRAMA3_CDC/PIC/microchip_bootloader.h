@@ -1,0 +1,11 @@
+///////////////////////////////////////////////////////////////////////////
+////                                                                   ////
+////                     MICROCHIP_BOOTLOADER.H                        ////
+////                                                                   ////
+//// NOTA: FUNCIONA CON LA VERSION DE USB_BOOTLOADER.EXE (HID) V.2.9a  ////
+////       NO FUNCIONA CON LA VERSION DE USB_BOOTLOADER.EXE HID V2.3.  ////
+////                                                                   ////
+///////////////////////////////////////////////////////////////////////////
+#define LOADER_SIZE 0x1000    //4096 Bytes.
+#build(reset=LOADER_SIZE, interrupt=LOADER_SIZE+0x08)
+#org 0, (LOADER_SIZE-1) {}

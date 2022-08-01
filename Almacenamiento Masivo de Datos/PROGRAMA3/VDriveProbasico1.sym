@@ -1,0 +1,331 @@
+000     @SCRATCH
+001     @SCRATCH
+001     _RETURN_
+002     @SCRATCH
+003     @SCRATCH
+004     @SCRATCH
+005     @INTERRUPT_AREA
+006     @INTERRUPT_AREA
+007     @INTERRUPT_AREA
+008     @INTERRUPT_AREA
+009     @INTERRUPT_AREA
+00A     @INTERRUPT_AREA
+00B     @INTERRUPT_AREA
+00C     @INTERRUPT_AREA
+00D     @INTERRUPT_AREA
+00E     @INTERRUPT_AREA
+00F     @INTERRUPT_AREA
+010     @INTERRUPT_AREA
+011     @INTERRUPT_AREA
+012     @INTERRUPT_AREA
+013     @INTERRUPT_AREA
+014     @INTERRUPT_AREA
+015     @INTERRUPT_AREA
+016     @INTERRUPT_AREA
+017     @INTERRUPT_AREA
+018-019 strtok.save
+01A-021 new_car
+022-024 USB_STRING_DESC_OFFSET
+025     g_InBootloader
+026-029 USB_stack_status
+02A     USTATCopy
+02B     usb_state
+02C     __setup_0_tx_size
+02D     USB_address_pending
+02E     usb_getdesc_ptr
+02F     usb_getdesc_len
+030-031 USB_Interface
+032-038 usb_cdc_line_coding
+039-03A usb_cdc_break
+03B-042 usb_cdc_encapsulated_cmd
+043-081 usb_cdc_put_buffer
+082     usb_cdc_put_buffer_nextin
+083-085 usb_cdc_get_buffer_status
+086.0   usb_cdc_got_set_line_coding
+086.1   act_lcd
+087     usb_cdc_carrier
+088     g_LastCDCDataPacketSize
+089     __usb_cdc_state
+08A     rs232_errors
+08B-184 dato
+185     c
+186     nombre
+187     band1
+188     l
+189-18C k
+18D-18E j
+18F-190 d
+191-2B0 menuC
+2B1-2B2 Display_Dato.dato2
+2B1     lcd_init.i
+2B1     @PUTCHAR_BIU_1.P1
+2B1     ObtenerDato.@SCRATCH1
+2B1     MAIN.@SCRATCH1
+2B2     lcd_init.@SCRATCH1
+2B2     ObtenerDato.@SCRATCH2
+2B3-2B4 Display_Dato.MS
+2B5-2B6 Display_Dato.str1
+2B7-2B8 Display_Dato.str2
+2B9     Display_Dato.car
+2BA     Display_Dato.car2
+2BB     Display_Dato.k
+2BC-2BD strlen.s
+2BC     Display_Dato.@SCRATCH1
+2BD     Display_Dato.@SCRATCH2
+2BE-2BF strlen.sc
+2BE     lcd_putc.c
+2BF     @delay_ms1.P1
+2BF     lcd_gotoxy.x
+2C0     lcd_gotoxy.y
+2C0     strlen.@SCRATCH1
+2C1     lcd_gotoxy.address
+2C2     lcd_gotoxy.@SCRATCH1
+2C3     lcd_send_byte.address
+2C4     lcd_send_byte.n
+2C5     lcd_read_byte.low
+2C5     lcd_send_byte.@SCRATCH1
+2C6     lcd_send_nibble.n
+2C6     lcd_read_byte.high
+2C7     lcd_read_byte.@SCRATCH1
+2C8     usb_isr.TRNAttempts
+2C9     usb_isr_tok_dne.en
+2C9     usb_token_reset.i
+2C9     usb_isr.@SCRATCH1
+2CA     pidKey
+2CA     usb_token_reset.@SCRATCH1
+2CB     usb_endpoint_stalled.endpoint
+2CB     usb_isr_tkn_setup_StandardInterface.curr_config
+2CB     usb_unstall_ep.endpoint
+2CB     usb_stall_ep.endpoint
+2CB     usb_set_configured.config
+2CB     usb_isr_tok_out_dne.endpoint
+2CB     usb_endpoint_is_valid.endpoint
+2CB     usb_isr_tok_in_dne.endpoint
+2CB     usb_flush_out.endpoint
+2CB     usb_isr_tok_dne.@SCRATCH1
+2CB     usb_token_reset.@SCRATCH2
+2CB     usb_Get_Descriptor.@SCRATCH1
+2CC.0   usb_stall_ep.direction
+2CC     usb_flush_out.tgl
+2CC     usb_copy_desc_seg_to_ep.i
+2CC     usb_set_configured.en
+2CC     usb_set_address.address
+2CC.0   usb_endpoint_stalled.direction
+2CC.0   usb_endpoint_is_valid.direction
+2CC.0   usb_unstall_ep.direction
+2CC     usb_rx_packet_size.endpoint
+2CC     usb_put_packet.endpoint
+2CC     usb_isr_tok_dne.@SCRATCH2
+2CC     usb_isr_tkn_setup_StandardInterface.@SCRATCH1
+2CD     usb_endpoint_stalled.st
+2CD     usb_flush_out.i
+2CD-2CE usb_set_configured.addy
+2CD     usb_copy_desc_seg_to_ep.c
+2CD-2CE usb_put_packet.ptr
+2CD     usb_rx_packet_size.@SCRATCH1
+2CD     usb_stall_ep.@SCRATCH1
+2CD     usb_unstall_ep.@SCRATCH1
+2CD     usb_isr_tok_dne.@SCRATCH3
+2CD     usb_endpoint_is_valid.@SCRATCH1
+2CD     usb_isr_tkn_setup_StandardInterface.@SCRATCH2
+2CE-2CF usb_flush_out.len
+2CE     usb_request_send_response.len
+2CE     usb_rx_packet_size.@SCRATCH2
+2CE     usb_stall_ep.@SCRATCH2
+2CE     usb_unstall_ep.@SCRATCH2
+2CE     usb_endpoint_stalled.@SCRATCH1
+2CE     usb_isr_tok_dne.@SCRATCH4
+2CE     usb_copy_desc_seg_to_ep.@SCRATCH1
+2CF     usb_set_configured.new_uep
+2CF-2D0 usb_put_packet.len
+2CF     usb_endpoint_stalled.@SCRATCH2
+2CF     usb_copy_desc_seg_to_ep.@SCRATCH2
+2D0-2D1 usb_set_configured.len
+2D0     usb_flush_out.@SCRATCH1
+2D1     usb_put_packet.tgl
+2D1     usb_flush_out.@SCRATCH2
+2D2     usb_set_configured.i
+2D2-2D3 usb_put_packet.buff_add
+2D3     usb_disable_endpoints.i
+2D3     usb_set_configured.@SCRATCH1
+2D4     usb_disable_endpoint.en
+2D4     usb_flush_in.endpoint
+2D4     usb_put_packet.@SCRATCH1
+2D4     usb_set_configured.@SCRATCH2
+2D5-2D6 usb_flush_in.len
+2D5     usb_put_packet.@SCRATCH2
+2D5     usb_disable_endpoint.@SCRATCH1
+2D6     usb_disable_endpoint.@SCRATCH2
+2D7     usb_flush_in.tgl
+2D8     usb_flush_in.i
+2D9     usb_tbe.en
+2D9     usb_flush_in.@SCRATCH1
+2DA     usb_tbe.@SCRATCH1
+2DA     usb_flush_in.@SCRATCH2
+2DB     usb_tbe.@SCRATCH2
+400-4AF g_USBRAM
+F66     UFRML
+F67     UFRMH
+F68.0   UIR_URST
+F68     UIR
+F68.1   UIR_UERR
+F68.2   UIR_ACTV
+F68.3   UIR_TRN
+F68.4   UIR_IDLE
+F68.5   UIR_STALL
+F68.6   UIR_SOF
+F69     UIE
+F69.0   UIE_URST
+F69.1   UIE_UERR
+F69.2   UIE_ACTV
+F69.3   UIE_TRN
+F69.4   UIE_IDLE
+F69.5   UIE_STALL
+F69.6   UIE_SOF
+F6A     UEIR
+F6B     UEIE
+F6C     U1STAT
+F6D     UCON
+F6D.1   UCON_SUSPND
+F6D.2   UCON_RESUME
+F6D.3   UCON_USBEN
+F6D.4   UCON_PKTDIS
+F6D.5   UCON_SE0
+F6D.6   UCON_PBRST
+F6E     UADDR
+F6F     UCFG
+F70-F7F g_UEP
+F81     lcd
+F8A     lcdlat
+F93     lcdtris
+FB4.6   C1OUT
+FB4.7   C2OUT
+FBB     CCP_2_LOW
+FBB     CCP_2
+FBC     CCP_2_HIGH
+FBE     CCP_1_LOW
+FBE     CCP_1
+FBF     CCP_1_HIGH
+FE9-FEA @READ_PROGRAM_MEMORY.P1
+FE9-FEA @WRITE_PROGRAM_MEMORY.P2
+FF2     INTCON
+FF2.7   INT_GIE
+FF6-FF8 @READ_PROGRAM_MEMORY.P1
+FF6-FF8 @WRITE_PROGRAM_MEMORY.P2
+
+ROM Allocation:
+30C4  @delay_ms1
+3382  strlen
+209E  LCD_INIT_STRING
+311E  lcd_read_byte
+3112  lcd_read_nibble
+30EE  lcd_send_nibble
+3168  lcd_send_byte
+31AE  lcd_init
+322C  lcd_gotoxy
+3252  lcd_putc
+33BE  Display_Dato
+20BC  usb_ep_tx_type
+20DC  usb_ep_rx_type
+20FC  usb_ep_tx_size
+212C  usb_ep_rx_size
+215C  USB_CONFIG_DESC
+21B0  USB_NUM_INTERFACES
+21C2  USB_CLASS_DESCRIPTORS
+21DA  USB_DEVICE_DESC
+21FC  USB_STRING_DESC
+2BB0  usb_tbe
+2BF4  usb_flush_in
+2DCE  usb_put_packet
+2AE6  usb_flush_out
+2D40  usb_rx_packet_size
+28F2  usb_stall_ep
+28AA  usb_unstall_ep
+293C  usb_endpoint_stalled
+2DA6  usb_set_address
+2520  usb_set_configured
+22C0  usb_disable_endpoint
+2306  usb_disable_endpoints
+2376  usb_clear_trn
+303C  usb_isr
+23AE  usb_isr_sof
+237A  usb_isr_rst
+228A  usb_init_ep0_setup
+22B8  usb_isr_uerr
+23A4  usb_isr_uidle
+227A  usb_isr_activity
+22AA  usb_isr_stall
+23B4  usb_request_send_response
+2A00  usb_request_get_data
+23BA  usb_request_stall
+2EC2  usb_isr_tok_dne
+2348  usb_token_reset
+2850  usb_endpoint_is_valid
+2E90  usb_isr_tok_in_dne
+2D88  usb_isr_tok_out_dne
+2AB4  usb_isr_tok_setup_dne
+26F2  usb_isr_tkn_setup_StandardDevice
+27A8  usb_isr_tkn_setup_StandardInterface
+2996  usb_isr_tkn_setup_StandardEndpoint
+2460  usb_Get_Descriptor
+2DC0  usb_finish_set_address
+23C0  usb_copy_desc_seg_to_ep
+2CD0  usb_isr_tok_out_cdc_control_dne
+2A06  usb_isr_tkn_cdc
+2D72  usb_isr_tok_out_cdc_data_dne
+2E86  usb_isr_tok_in_cdc_data_dne
+2E62  usb_cdc_flush_out_buffer
+2324  usb_cdc_init
+32C0  @PUTCHAR_BIU_1
+32CE  @GETCH_BIU_1
+32E6  ObtenerDato
+349E  MAIN
+2230  @const612
+2256  @const613
+349E  @cinit
+0136  PC
+0136  FIN
+
+
+User Memory space: 
+
+Project Directory:
+    D:\CURSO2011\PROGRAMA3\
+
+Project Files:
+    VDriveProbasico1.c
+    C:\Program Files\PICC\devices\18F2455.h
+    C:\Program Files\PICC\drivers\usb_bootloader.h
+    C:\Program Files\PICC\drivers\string.h
+    C:\Program Files\PICC\drivers\stddef.h
+    C:\Program Files\PICC\drivers\ctype.h
+    lcd1.c
+    C:\Program Files\PICC\drivers\usb_desc_cdc.h
+    C:\Program Files\PICC\drivers\usb.h
+    C:\Program Files\PICC\drivers\usb_cdc.h
+    C:\Program Files\PICC\drivers\pic18_usb.h
+    C:\Program Files\PICC\drivers\usb_hw_layer.h
+    C:\Program Files\PICC\drivers\usb.c
+    C:\Program Files\PICC\drivers\pic18_usb.c
+
+Units:
+    D:\CURSO2011\PROGRAMA3\VDriveProbasico1.c (main)
+
+Compiler Settings:
+    Processor:      PIC18F2455
+    Pointer Size:   16
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      VDriveProbasico1.err
+    Ext Symbols: VDriveProbasico1.esym
+    INHX32:      VDriveProbasico1.hex
+    Symbols:     VDriveProbasico1.sym
+    List:        VDriveProbasico1.lst
+    Debug/COFF:  VDriveProbasico1.cof
+    Project:     VDriveProbasico1.PJT
+    Call Tree:   VDriveProbasico1.tre
+    Statistics:  VDriveProbasico1.sta

@@ -1,0 +1,181 @@
+unit UDP_mainU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Sockets, StdCtrls, ActnList, XPStyleActnCtrls,
+  ActnMan, ExtCtrls, winsock, JvComponent, JvHidControllerClass;
+
+const
+  WM_SOCKET_CLOSED = WM_USER + $37;
+
+type
+  TListener = class(Tthread)
+    private
+      UdpPort: TudpSocket;
+      SendData: Tmemo;
+      procedure Execute; override;
+  end;
+
+  TFrmTCPMain = class(TForm)
+    IP_Address: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    SourcePort: TEdit;
+    IncommingData: TMemo;
+    Label3: TLabel;
+    SendData: TMemo;
+    Label4: TLabel;
+    SendButt: TButton;
+    ActionManager1: TActionManager;
+    ConnectAct: TAction;
+    SendAct: TAction;
+    Timer1: TTimer;
+    UdpSocket1: TUdpSocket;
+    Label5: TLabel;
+    DestPort: TEdit;
+    Button1: TButton;
+    RemoteHost: TEdit;
+    Label6: TLabel;
+    UdpSocket2: TUdpSocket;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure UdpSocket1Error(Sender: TObject; SocketError: Integer);
+    procedure Timer1Timer(Sender: TObject);
+    procedure UdpSocket1Receive(Sender: TObject; Buf: PAnsiChar;
+      var DataLen: Integer);
+    procedure ConnectActExecute(Sender: TObject);
+    procedure SendActExecute(Sender: TObject);
+  private
+    { Private declarations }
+    Listener: TListener;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmTCPMain: TFrmTCPMain;
+
+implementation
+
+{$R *.dfm}
+
+
+
+procedure TFrmTCPMain.SendActExecute(Sender: TObject);
+var
+  add: sockaddr_in;
+begin
+  //udpsocket1.SendBuf(Pchar(self.senddata.lines.text)^, length(senddata.lines.Text));
+  //add.sin_family := AF_INET;
+  //add.sin_port := strtoint(self.DestPort.text);
+  //add.sin_addr.s_addr := INADDR_BROADCAST;
+  //timer1.enabled := FALSE;
+  //add := udpsocket2.GetSocketAddr(RemoteHost.text, DestPort.text);
+  //udpsocket2.SendTo(pchar(self.SendData.lines.text)^, length(senddata.lines.text),add);
+  udpsocket2.SendBuf(pchar(SendData.lines.text)^, length(senddata.lines.text));
+  Senddata.lines.Clear;
+  //timer1.enabled := TRUE;
+
+end;
+
+procedure TFrmTCPMain.ConnectActExecute(Sender: TObject);
+begin
+  if not udpsocket1.Active
+    then
+      begin
+        UdpSocket1.LocalPort :=  SourcePort.Text;
+        UdpSocket1.RemotePort := DestPort.text;
+        udpsocket1.RemoteHost := remoteHost.text;
+        //UdpSocket1.RemoteHost := inttostr(INADDR_ANY);
+
+        udpsocket1.Active := TRUE;
+
+        //UdpSocket2.LocalPort :=  SourcePort.Text;
+        UdpSocket2.RemotePort := DestPort.text;
+        udpsocket2.RemoteHost := remoteHost.text;
+        udpsocket2.Active := TRUE;
+        IP_Address.text := udpsocket1.LocalHost;
+        self.SourcePort.text := udpsocket1.LocalPort;
+        Listener := TListener.Create(TRUE);
+        listener.UdpPort := udpsocket1;
+        listener.SendData := senddata;
+        listener.Resume;
+      end
+    else
+      begin
+        listener.Suspend;
+        FreeAndNil(listener);
+        udpsocket1.active := FALSE;
+      end;
+end;
+
+procedure TFrmTCPMain.UdpSocket1Receive(Sender: TObject; Buf: PAnsiChar;
+  var DataLen: Integer);
+begin
+  self.IncommingData.Lines.add(copy(buf, 1, datalen));
+end;
+
+var
+  in_timer1: boolean;
+
+procedure TFrmTCPMain.Timer1Timer(Sender: TObject);
+var
+  buff: array[0..$FF] of char;
+  add: sockaddr_in;
+  len: integer;
+begin
+  in_timer1 := TRUE;
+  if udpsocket1.Connected //and udpsocket1.WaitForData(50)
+    then
+      begin
+        len := sizeof(add);
+        add := udpsocket1.GetSocketAddr(remotehost.text, destport.text);
+        udpsocket1.ReceiveFrom(buff, sizeof(buff), add, len);
+      end;
+  in_timer1 := FALSE;
+
+end;
+
+procedure TFrmTCPMain.UdpSocket1Error(Sender: TObject; SocketError: Integer);
+const
+  WAWOULDBLOCK = 10035;
+begin
+  if not (in_timer1 and (socketError = WAWOULDBLOCK))
+    then self.IncommingData.Lines.add('Socket Error # ' + inttostr(socketError));
+end;
+
+{ Tlistener }
+
+procedure Tlistener.Execute;
+var
+  buff: array[0..$FF] of char;
+  add: sockaddr_in;
+  len: integer;
+begin
+  inherited;
+  repeat
+    if assigned(udpport) //and Udpport.WaitForData(500)
+      then
+        begin
+          len := sizeof(add);
+          //add := udpport.GetSocketAddr(udpport.RemoteHost, udpport.RemotePort);
+          //udpport.ReceiveFrom(buff, sizeof(buff), add, len);
+          udpport.ReceiveBuf(buff, sizeof(buff));
+        end;
+
+  until terminated;
+end;
+
+procedure TFrmTCPMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FreeAndNil(Listener);
+end;
+
+procedure TFrmTCPMain.FormCreate(Sender: TObject);
+begin
+  Listener := nil;
+end;
+
+end. {Unit}

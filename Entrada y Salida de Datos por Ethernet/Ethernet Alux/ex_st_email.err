@@ -1,0 +1,19 @@
+>>> Warning 201 "C:\Otros Ejemplos Ethernet\tcpip\helpers.c" Line 189(1,1): Assignment inside relational expression
+>>> Warning 201 "C:\Otros Ejemplos Ethernet\tcpip\helpers.c" Line 264(1,1): Assignment inside relational expression
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 352(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 360(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 556(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 593(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 606(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 613(1,1): Code has no effect
+>>> Warning 206 "C:\Otros Ejemplos Ethernet\tcpip\smtp.c" Line 322(1,1): Variable of this data type is never greater than this constant
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\smtp.c" Line 384(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\smtp.c" Line 386(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\smtp.c" Line 396(1,1): Code has no effect
+>>> Warning 207 "C:\Otros Ejemplos Ethernet\tcpip\smtp.c" Line 402(1,1): Code has no effect
+>>> Warning 203 "C:\Otros Ejemplos Ethernet\tcpip\dns.c" Line 311(1,1): Condition always TRUE
+>>> Warning 201 "C:\Otros Ejemplos Ethernet\ccshelperui.c" Line 126(1,1): Assignment inside relational expression
+>>> Warning 206 "ex_st_email.c" Line 331(1,1): Variable of this data type is never greater than this constant
+>>> Warning 202 "C:\Otros Ejemplos Ethernet\tcpip\udp.c" Line 239(10,14): Variable never used:   temp
+      Memory usage:   ROM=61%      RAM=22% - 26%
+      0 Errors,  17 Warnings.

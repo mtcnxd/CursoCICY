@@ -1,0 +1,12 @@
+con un cable cruzado, pero me parece que en windows XP ya no se soporta esto.
+
+Sin embargo, el procedimiento es conectar el cable cruzado y luego asignar manualmente la configuración IP para ambos hosts, tanto IP address como máscara etc.
+
+Sólo que al no tener otro dispositivo, no es necesario poner un gateway, ya que de cualquier manera no podrás salir de esa red.
+
+un ejemplo:
+
+192.168.1.1 255.255.255.252
+192.168.1.2 255.255.255.252
+
+así sólo se verán esas dos máquinas y no buscarán otro host, lo que simplificará tus operaciones.

@@ -1,0 +1,53 @@
+
+ROM used: 752 (2%)
+          756 (2%) including unused fragments
+
+          1 Average locations per line
+          12 Average locations per statement
+
+RAM used: 10 (0%) at main() level
+          11 (1%) worst case
+
+Stack used: 1 worst case (out of 31 total available)
+
+Lines Stmts  %   Files
+----- ----- ---  -----
+   80    63 100  BluetoothPic.c
+  371     0   0  C:\Program Files\PICC\devices\18F2550.h
+  133     0   0  C:\Program Files\PICC\drivers\usb_bootloader.h
+----- -----
+  584    63 Total
+
+Page ROM  %  RAM   Vol Diff  Functions:
+---- --- --- ---   --- ----  ----------
+0     40   3   1             @delay_ms1
+0     10   1   1             @PUTCHAR_BIU_1
+0     24   2   0             @GETCH_BIU_1
+0    482  32   2  2295  6.8  main
+0     42   3   0             @goto10088
+0     30   2   0             @const82
+0     30   2   0             @const83
+0     30   2   0             @const84
+0     30   2   0             @const85
+0     30   2   0             @const86
+
+Program metrics:
+    Functions               1
+    Statements              63
+    Comments                173
+    Volume (V)              2324
+    Difficilty (D)          6.4
+    Effort to implement (E) 14840
+    Time to implement (T)   14 minutes
+    Est Delivered Bugs (B)  0
+    Cyclomatic Complexity   22
+    Maintainability (MI)    108
+
+ Segment     Used  Free
+-----------  ----  ----
+00000-01FFE     0  8192  
+02000-02006     4  4  
+02008-07FFE   748  23820  
+
+
+

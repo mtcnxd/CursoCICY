@@ -1,0 +1,73 @@
+000     @SCRATCH
+001     @SCRATCH
+001     _RETURN_
+002     @SCRATCH
+003     @SCRATCH
+004     @SCRATCH
+005     rs232_errors
+006     botones
+007     main.c
+008     main.@SCRATCH1
+009     @delay_ms1.P1
+009     @PUTCHAR_BIU_1.P2
+025     g_InBootloader
+F80     PORTA
+F81     PORTB
+FB4.6   C1OUT
+FB4.7   C2OUT
+FBB     CCP_2_LOW
+FBB     CCP_2
+FBC     CCP_2_HIGH
+FBE     CCP_1
+FBE     CCP_1_LOW
+FBF     CCP_1_HIGH
+FE9-FEA @READ_PROGRAM_MEMORY.P1
+FE9-FEA @WRITE_PROGRAM_MEMORY.P2
+FF6-FF8 @READ_PROGRAM_MEMORY.P1
+FF6-FF8 @WRITE_PROGRAM_MEMORY.P2
+
+ROM Allocation:
+209E  @delay_ms1
+20DE  @PUTCHAR_BIU_1
+20C6  @GETCH_BIU_1
+20E8  main
+22CA  @goto10088
+2008  @const82
+2026  @const83
+2044  @const84
+2062  @const85
+2080  @const86
+20E8  @cinit
+
+
+User Memory space: 
+
+Project Directory:
+    D:\CURSO 2011\Entrada y Salida de Datos por Bluetooth\Bluetooth\
+
+Project Files:
+    BluetoothPic.c
+    C:\Program Files\PICC\devices\18F2550.h
+    C:\Program Files\PICC\drivers\usb_bootloader.h
+
+Units:
+    D:\CURSO 2011\Entrada y Salida de Datos por Bluetooth\Bluetooth\BluetoothPic.c (main)
+
+Compiler Settings:
+    Processor:      PIC18F2550
+    Pointer Size:   16
+    ADC Range:      0-255
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    Errors:      BluetoothPic.err
+    Ext Symbols: BluetoothPic.esym
+    INHX32:      BluetoothPic.hex
+    Symbols:     BluetoothPic.sym
+    List:        BluetoothPic.lst
+    Debug/COFF:  BluetoothPic.cof
+    Project:     BluetoothPic.PJT
+    Call Tree:   BluetoothPic.tre
+    Statistics:  BluetoothPic.sta

@@ -1,0 +1,6 @@
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\Ethernet\Más Ejemplos Ethernet\tcpip\helpers.c" Line 189(1,1): Assignment inside relational expression
+>>> Warning 201 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\Ethernet\Más Ejemplos Ethernet\tcpip\helpers.c" Line 264(1,1): Assignment inside relational expression
+>>> Warning 202 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\Ethernet\Más Ejemplos Ethernet\ccstcpip.h" Line 160(6,23): Variable never used:   ExampleIPDatagram
+>>> Warning 202 "D:\CURSO 2011\Entrada y Salida de Datos por Ethernet\Ethernet\Más Ejemplos Ethernet\ccstcpip.h" Line 166(6,22): Variable never used:   ExampleUDPPacket
+      Memory usage:   ROM=58%      RAM=21% - 30%
+      0 Errors,  4 Warnings.

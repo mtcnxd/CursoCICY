@@ -1,0 +1,59 @@
+//PROGRAMA PARA COMUNICAR LA PC CON EL V DRIVE UTILIZANDO COMO INTERFACE LA TARJETA ALUX 1.0
+//CENTRO DE INVESTIGACIÓN CIENTÍFICA DE YUCATÁN, A. C.
+//PROGRAMÓ: JULIO LUGO
+//FECHA: 01 SEP 2010
+//LUGAR: MERIDA, YUCATÁN.
+
+//SI UTILIZAMOS UN PIC18F4550 SUSTITUIR #include <18F2455.h> POR #include<18F4550>
+   #include <18F2550.h>                               //DIRECTIVA PARA ESPECIFICAR EL CHIP A UTILIZAR
+   #fuses HSPLL,NOWDT,NOPROTECT,NOLVP,NODEBUG,USBDIV,PLL2,CPUDIV1,VREGEN,NOPBADEN   //FUSIBLES
+   
+   #device ADC=10
+//FRECUENCIA A CONSIDERAR EN LOS COMANDOS DE RETARDO                                                   
+   #use delay(clock=48000000)
+
+//DIRECTIVAS PARA CARGA CON EL BOOTLOADER
+   #include <usb_bootloader.h>
+   
+//DIRECTIVA PARA UTILIZAR EL LCD   
+   #define LCD_DATA_PORT getenv("SFR:PORTB")
+   #include <lcd.c>
+   
+   #include <alux.h>
+   
+   //#use    RS232  (UART1, BAUD=9600, PARITY=N, BITS=8, STOP=1, DISABLE_INTS )  //RS232MDE SOFTWARE
+   #use rs232(UART1, baud=9600, DISABLE_INTS, errors)
+
+  
+void main(void) {
+   unsigned int16 c,L1;
+
+      
+   output_low(PIN_C0);      //Reset Bluetooth
+   delay_ms(1000);
+   output_high(PIN_C0);     //Activa Bluetooth
+      
+   lcd_init();
+   printf(LCD_PUTC,"\fBLUETOOTH\n");
+
+   while (TRUE)    {
+
+         if (kbhit())        {            //RECIBE DEL BLUETOOTH
+            c=getc();
+            if (c=='\r') {
+               L1=1;
+            }
+            else {
+               if (L1==1) printf(LCD_PUTC,"\f");  //BORRA TODO
+               lcd_gotoxy(L1++,1);
+               printf(LCD_PUTC,"%c",c);
+            }
+         }            
+            
+         c=Alux_ADC_1();
+         printf(LCD_PUTC,"\n%lu   ",c);
+         printf("%Lu   \r",c);            //ENVIA AL BLUETOOTH
+         delay_ms(100);
+      
+      }
+}

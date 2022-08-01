@@ -1,0 +1,13 @@
+program UDP;
+
+uses
+  Forms,
+  UDP_mainU in 'UDP_mainU.pas' {FrmMain};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TFrmMain, FrmMain);
+  Application.Run;
+end.

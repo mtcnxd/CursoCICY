@@ -1,0 +1,5 @@
+>>> Warning 203 "C:\Program Files\PICC\drivers\pic18_usb.c" Line 527(1,1): Condition always TRUE
+>>> Warning 202 "VDriveProbasico1.c" Line 35(8,11): Variable never used:   rs232_errors
+>>> Warning 202 "VDriveProbasico1.c" Line 42(17,22): Variable never used:   band1
+      Memory usage:   ROM=27%      RAM=42% - 44%
+      0 Errors,  3 Warnings.
